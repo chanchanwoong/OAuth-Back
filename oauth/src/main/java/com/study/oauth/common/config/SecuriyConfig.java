@@ -1,5 +1,7 @@
 package com.study.oauth.common.config;
 
+import com.study.oauth.common.auth.JwtTokenFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -15,7 +18,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecuriyConfig {
+
+    private final JwtTokenFilter jwtTokenFilter;
 
     @Bean
     public PasswordEncoder makePassword() {
@@ -37,6 +43,13 @@ public class SecuriyConfig {
                 .authorizeHttpRequests(a -> a.requestMatchers(
                         "/member/create", "/member/doLogin", "/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll().anyRequest().authenticated())
+
+                /**
+                 *  UsernamePasswordAuthenticationFilter는 Spring Security에서 제공하는 로그인 폼을 의미한다.
+                 *  해당 UsernamePasswordAuthenticationFilter 필터 전에, JwtTokenFilter를 사용하여 Authentication 객체를 생성
+                 *  UsernamePasswordAuthenticationFilter를 무용지물로 만드는 것
+                 */
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
