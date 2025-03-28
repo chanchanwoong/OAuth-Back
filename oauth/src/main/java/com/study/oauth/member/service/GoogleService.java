@@ -93,7 +93,14 @@ public class GoogleService {
 
     // 사용자 정보 획득 메서드
     private GoogleProfileVo getGoogleProfile(String accessToken) {
-        System.out.println("Access Token : " + accessToken);
-        return null;
+        RestClient restClient = RestClient.create();
+
+        ResponseEntity<GoogleProfileVo> response =  restClient.get()
+                .uri("https://openidconnect.googleapis.com/v1/userinfo")
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .toEntity(GoogleProfileVo.class);
+        System.out.println("응답 profile JSON : "  + response.getBody());
+        return response.getBody();
     }
 }
