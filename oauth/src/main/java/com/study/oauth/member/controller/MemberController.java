@@ -1,9 +1,11 @@
 package com.study.oauth.member.controller;
 
 import com.study.oauth.common.auth.JwtTokenProvider;
+import com.study.oauth.member.data.vo.RedirectVo;
 import com.study.oauth.member.domain.Member;
-import com.study.oauth.member.dto.MemberCreateDto;
-import com.study.oauth.member.dto.MemberLoginDto;
+import com.study.oauth.member.data.dto.MemberCreateDto;
+import com.study.oauth.member.data.dto.MemberLoginDto;
+import com.study.oauth.member.service.GoogleService;
 import com.study.oauth.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final GoogleService googleService;
 
     @PostMapping("/create")
     public ResponseEntity<?> memberCreate(@RequestBody MemberCreateDto memberCreateDto) {
@@ -42,5 +45,18 @@ public class MemberController {
         loginInfo.put("id", member.getId());
         loginInfo.put("token", jwtToken);
         return new ResponseEntity<>(loginInfo, HttpStatus.OK);
+    }
+
+    /**
+     *  구글 인가코드를 받는 Controller
+     *  - 프론트엔드에서 구글 인가코드를 가지고 유저 정보를 반환받는 Controller
+     *  - 해당 Controller에서 HTTP Body를 통해 인가 코드를 받음
+     *  - 해당 인가 코드를 가지고 구글 서버에 사용자 정보 요청
+     *  - 사용자 정보를 통해 서비스 유저인지 확인
+     *  - 유저인 경우, JWT 토큰 발급
+     */
+    @PostMapping("/google/doLogin")
+    public ResponseEntity<?> googleLogin(@RequestBody RedirectVo redirectVo) {
+        return new ResponseEntity<>(googleService.getToken(redirectVo), HttpStatus.OK);
     }
 }

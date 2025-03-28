@@ -1,8 +1,10 @@
 package com.study.oauth.member.service;
 
+import com.study.oauth.member.data.vo.GoogleProfileVo;
 import com.study.oauth.member.domain.Member;
 import com.study.oauth.member.data.dto.MemberCreateDto;
 import com.study.oauth.member.data.dto.MemberLoginDto;
+import com.study.oauth.member.domain.SocialType;
 import com.study.oauth.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,17 @@ public class MemberService {
             throw new IllegalArgumentException("password가 일치하지 않습니다.");
         }
 
+        return member;
+    }
+
+    public Member createOauth(GoogleProfileVo googleProfileVo, SocialType socialType) {
+        Member member = Member.builder()
+                .email(googleProfileVo.getEmail())
+                .socialType(socialType)
+                .socialId(googleProfileVo.getSub())
+                .build();
+
+        memberRepository.save(member);
         return member;
     }
 }
