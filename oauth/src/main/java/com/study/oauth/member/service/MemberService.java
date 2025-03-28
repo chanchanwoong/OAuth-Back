@@ -1,8 +1,8 @@
 package com.study.oauth.member.service;
 
 import com.study.oauth.member.domain.Member;
-import com.study.oauth.member.dto.MemberCreateDto;
-import com.study.oauth.member.dto.MemberLoginDto;
+import com.study.oauth.member.data.dto.MemberCreateDto;
+import com.study.oauth.member.data.dto.MemberLoginDto;
 import com.study.oauth.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

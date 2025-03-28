@@ -1,4 +1,4 @@
-package com.study.oauth.member.dto;
+package com.study.oauth.member.data.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
