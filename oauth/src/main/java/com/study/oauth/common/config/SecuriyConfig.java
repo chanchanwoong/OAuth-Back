@@ -41,7 +41,7 @@ public class SecuriyConfig {
 
                 // 특정 url 패턴에 대해서는 security filter에서 제외(Authentication 객체를 안만들겠다는 의미)
                 .authorizeHttpRequests(a -> a.requestMatchers(
-                        "/member/create", "/member/doLogin", "/swagger-ui/**", "/v3/api-docs/**")
+                        "/member/create", "/member/doLogin", "/member/google/doLogin", "/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll().anyRequest().authenticated())
 
                 /**
